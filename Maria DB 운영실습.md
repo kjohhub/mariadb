@@ -96,13 +96,15 @@ SELECT * FROM uv_membertbl;
 > 실무에서는 SQL 문을 하나씩 실행하는 것보다 스토어드 프로시저로 관리하는 경우가 많음
 
 ```mariadb
-DELIMITER //
+DELIMITER $$	-- Delimiter를 $$ 로 바꾼다.
+
 CREATE PROCEDURE myProc()
 BEGIN
 	SELECT * FROM membertbl WHERE membername = '당탕이';
 	SELECT * FROM producttbl WHERE productname = '냉장고';
-END //
-DELIMITER;
+END $$
+
+DELIMITER ;		-- Delimiter를 다시 ;로 바꾼다.
 ```
 
 ```mariadb
@@ -116,7 +118,8 @@ CALL myProc()
 > 테이블에 부착되어서, 테이블에 INSERT나 UPDATE 또는 DELETE 작업이 발생되면 실행되는 코드
 
 ```mariadb
-DELIMITER //
+DELIMITER $$	-- Delimiter를 $$ 로 바꾼다.
+
 CREATE TRIGGER trg_deletedMemberTbl
 	AFTER DELETE
 	ON memberTbl
@@ -124,8 +127,9 @@ CREATE TRIGGER trg_deletedMemberTbl
 BEGIN
 	INSERT INTO deletedmembertbl
 		VALUES (OLD.memberId, OLD.memberName, OLD.memberAddress, CURDATE());
-END //
-DELIMITER;
+END $$
+
+DELIMITER ;		-- Delimiter를 다시 ;로 바꾼다.
 ```
 
 ```mariadb
